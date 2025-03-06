@@ -15,10 +15,10 @@ This project is built using Python, and was developed in Visual Studio Code.
 # Useful Websites
 
 - [Firestore Docs](https://firebase.google.com/docs/firestore/quickstart#c)
-- [Web Site Name](http://url.link.goes.here)
+- [OOP Principles](https://en.wikipedia.org/wiki/Object-oriented_programming)
 
 # Future Work
 
-- Item 1
-- Item 2
-- Item 3
+- Add a simple GUI
+- Notifications for addition and removal
+- Add max/min, quotas, and ordering information
