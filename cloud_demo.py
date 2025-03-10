@@ -19,7 +19,7 @@ def show_menu():
         show_menu()
 
 
-def start_inventory(inv : Inventory):
+def start_inventory(inv : Inventory, ref : object):
     
     choice = show_menu()
     #TODO: Load from cloud db
@@ -27,24 +27,28 @@ def start_inventory(inv : Inventory):
         name = input("Enter item name: ")
         qty = input("Enter item quantity: ")
         
-        inv.add_item(Item(name,qty))
+        inv.add_item(Item(name,qty),ref)
+        
     elif choice == 2:
-        id = input("Enter item id: ")
+        id = int(input("Enter item id: "))
         search = inv.get_item_id(id)
         if search is None:
             print("Item not found")
             return
-        inv.remove_item(search)
+        inv.remove_item(search,ref)
     elif choice == 3:
         print(inv.__str__())
     elif choice == 4:
-        db.collection("inventories").document(inv.name).set(inv.to_dict())
         return
-    start_inventory(inv)
-doc_ref = db.collection("inventories").document("Main")
+    start_inventory(inv,ref)
+
+inv_name = input("Enter inventory name: ")
+doc_ref = db.collection(inv_name)
 
 doc = doc_ref.get()
-inv = Inventory("Main",[])
-if doc.exists:
-    inv.from_dict(doc.to_dict())
-start_inventory(inv)
+inv = Inventory(inv_name,[])
+if any(doc):
+    inv.from_dict(inv,doc.to_dict())
+else:
+    print("Creating new inventory")
+start_inventory(inv,doc_ref)

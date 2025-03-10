@@ -1,4 +1,5 @@
 from typing import List
+from firebase_admin import firestore
 from Item import Item
 
 class Inventory:
@@ -36,10 +37,14 @@ class Inventory:
             })
         return d
 
-    def add_item(self,item : Item):
+    def add_item(self,item : Item, ref : object):
+        #ref.update({"items":firestore.ArrayUnion([item.to_dict()])})
+        ref.document(item.name).set(item.to_dict())
         self.items.append(item)
     
-    def remove_item(self,item : Item):
+    def remove_item(self,item : Item, ref : object):
+        #ref.update({"items":firestore.ArrayRemove([item.to_dict()])})
+        ref.document(item.name).delete()
         self.items.remove(item)
 
     def get_item_id(self,id : int):
