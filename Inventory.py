@@ -14,12 +14,12 @@ class Inventory:
         return summ
     
     @staticmethod
-    def from_dict(self,d : dict):
-        self.name = d['name']
+    def from_dict(self,d : object, name : str):
+        self.name = name
         self.items = [] #empty init
-        for i in d['items']:
-            item = Item(i['name'],i['qty'])
-            item.id = i['id']
+        for i in d:
+            item = Item(i.get('name'),i.get('qty'))
+            item.id = i.get('id')
             if item.id >= Item.nextId: #update nextId if id is greater
                 Item.nextId = item.id + 1
             self.items.append(item)
@@ -46,6 +46,22 @@ class Inventory:
         #ref.update({"items":firestore.ArrayRemove([item.to_dict()])})
         ref.document(item.name).delete()
         self.items.remove(item)
+
+    def update_item(self, item: Item, ref: object):
+        name = item.name
+        print(f"Current name: {item.name}")
+        newName = input("Enter new name: ")
+        if(newName != ""):
+            item.name = newName
+        print(f"Current quantity: {item.qty}")    
+        newQty = input("Enter new quantity: ")
+        if(newQty != ""):
+            try:
+                item.qty = int(newQty)
+            except TypeError:
+                print("Invalid quantity")
+        ref.document(name).update(item.to_dict())
+
 
     def get_item_id(self,id : int):
         for i in self.items:
