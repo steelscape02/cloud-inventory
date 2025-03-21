@@ -39,16 +39,16 @@ class Inventory:
 
     def add_item(self,item : Item, ref : object):
         #ref.update({"items":firestore.ArrayUnion([item.to_dict()])})
-        ref.document(item.name).set(item.to_dict())
+        ref.document(str(item.id)).set(item.to_dict())
         self.items.append(item)
     
     def remove_item(self,item : Item, ref : object):
         #ref.update({"items":firestore.ArrayRemove([item.to_dict()])})
-        ref.document(item.name).delete()
+        ref.document(str(item.id)).delete()
         self.items.remove(item)
 
     def update_item(self, item: Item, ref: object):
-        name = item.name
+        id = item.id
         print(f"Current name: {item.name}")
         newName = input("Enter new name: ")
         if(newName != ""):
@@ -60,7 +60,7 @@ class Inventory:
                 item.qty = int(newQty)
             except TypeError:
                 print("Invalid quantity")
-        ref.document(name).update(item.to_dict())
+        ref.document(str(id)).update(item.to_dict())
 
 
     def get_item_id(self,id : int):
